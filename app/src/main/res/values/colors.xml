@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="colorPrimary">#3F51B5</color>
+    <color name="colorPrimaryDark">#303F9F</color>
+    <color name="colorAccent">#FF4081</color>
+
+    <color name="colorSimple">#9791E3</color>
+    <color name="colorDetailed">#D9E391</color>
+
+    <color name="check">#68F08C</color>
+    <color name="track">#F07171</color>
+    <color name="note">#6777E0</color>
+    <color name="reminder">#FFBC75</color>
+
+    <color name="save">#68F08C</color>
+    <color name="cancel">#F07171</color>
+
+    <color name="white">#FFFFFF</color>
+</resources>

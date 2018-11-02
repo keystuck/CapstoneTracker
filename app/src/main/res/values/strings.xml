@@ -1,0 +1,77 @@
+<resources>
+    <string name="app_name">SimpleHealthTracker</string>
+
+    <string name="widget_content_desc">Next Reminder</string>
+
+    <string name="simple">Simple Menu</string>
+    <string name="detailed">Detailed Menu</string>
+
+    <string name="check">Check Item Off a List</string>
+    <string name="track">Enter an Action</string>
+    <string name="note">Record a Note</string>
+    <string name="reminder">Set a Reminder</string>
+
+    <string name="save">Save</string>
+    <string name="cancel">Cancel</string>
+    <string name="delete">Delete Selected</string>
+    <string name="search">Search</string>
+    <string name="share">Send Report</string>
+
+    <string name="desc">Description</string>
+    <string name="dose">Dosage</string>
+    <string name="date_and_time">Date and Time</string>
+    <string name="taken">Taken?</string>
+    <string name="from_date">From:</string>
+    <string name="to_date">To:</string>
+
+    <string name="reminder_example">Example: Warfarin</string>
+    <string name="track_example">Example: Pain Level</string>
+    <string name="amplitude_description">Amount (if not relevant, enter 1)</string>
+    <string name="date_description">Click for date dialog (if today, leave blank)</string>
+    <string name="time_description">Click for time dialog (if now, leave blank)</string>
+    <string name="type_description">Type of record</string>
+    <string name="from_date_hint">Click to choose earliest date to display (for all, leave blank)</string>
+    <string name="to_date_hint">Click to choose latest date to display (for present, leave blank)</string>
+    <string name="from_date_reminder_hint">Click to choose earliest date to display (for today, leave blank)</string>
+    <string name="to_date_reminder_hint">Click to choose latest date to display (for next two weeks, leave blank)</string>
+    <string name="how_to_delete_reminders">To delete upcoming reminders, select desired items then press the delete button</string>
+
+    <string name="add_OK">Record added successfully</string>
+    <string name="add_error">Problem adding record</string>
+
+    <string name="view_settings">View settings: colors, fonts, sizes</string>
+    <string name="sound_settings">Sound settings: alerts, volume</string>
+    <string name="notification_settings">View/Delete Reminders</string>
+    <string name="notes_view">View/Delete Notes</string>
+    <string name="reports">Generate reports to email/print</string>
+    <string name="med_history">Medication History</string>
+    <string name="view_notes">View and Delete Notes</string>
+
+    <string name="default_entry">OTHER</string>
+
+    <string name="notification_title">SimpleHealthTracker Reminder</string>
+    <string name="notification_text">You set a reminder for</string>
+
+    <string name="channel_name">SH notifications</string>
+    <string name="channel_description">SH reminder notifications</string>
+
+    <string name="to_check_off">Press to Check Off</string>
+    <string name="to_cancel_delete">Press to Delete</string>
+    <string name="will_check_off">Will be Checked Off</string>
+    <string name="will_cancel">Will be Deleted</string>
+
+    <string name="type_meds">MEDS</string>
+    <string name="type_pain">PAIN/NAUSEA</string>
+    <string name="type_brtrip">BATHROOM TRIP</string>
+    <string name="type_note">NOTE</string>
+    <string name="type_other">OTHER</string>
+
+    <string name="time_picker" translatable="false">timePicker</string>
+    <string name="date_picker" translatable="false">datePicker</string>
+    <string name="to_date_picker" translatable="false">toDatePicker</string>
+
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="appwidget_text">EXAMPLE</string>
+    <string name="add_widget">Add widget</string>
+</resources>

@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="types_array">
+        <item>@string/type_meds</item>
+        <item>@string/type_pain</item>
+        <item>@string/type_brtrip</item>
+        <item>@string/type_note</item>
+        <item>@string/type_other</item>
+    </string-array>
+</resources>

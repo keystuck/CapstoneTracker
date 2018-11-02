@@ -1,0 +1,70 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".SimpleMenuFragment">
+
+    <!-- TODO: Update blank fragment layout -->
+    <Button
+        android:id="@+id/btn_check"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@color/check"
+        android:onClick="openTask"
+        android:text="@string/check"
+        android:textAllCaps="false"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@id/btn_note"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_track"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_track"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@color/track"
+        android:onClick="openTask"
+        android:text="@string/track"
+        android:textAllCaps="false"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toTopOf="@id/btn_reminder"
+        app:layout_constraintLeft_toRightOf="@id/btn_check"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <Button
+        android:id="@+id/btn_note"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@color/note"
+        android:onClick="openTask"
+        android:text="@string/note"
+        android:textAllCaps="false"
+        android:textSize="40sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toLeftOf="@id/btn_reminder"
+        app:layout_constraintTop_toBottomOf="@id/btn_check" />
+
+    <Button
+        android:id="@+id/btn_reminder"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:layout_margin="16dp"
+        android:background="@color/reminder"
+        android:text="@string/reminder"
+        android:textAllCaps="false"
+        android:textSize="40sp"
+        android:onClick="openTask"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintLeft_toRightOf="@id/btn_note"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_track" />
+
+</android.support.constraint.ConstraintLayout>
