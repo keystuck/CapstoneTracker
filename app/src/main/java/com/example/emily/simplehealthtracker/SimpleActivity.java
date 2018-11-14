@@ -1,61 +1,100 @@
 package com.example.emily.simplehealthtracker;
 
+import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.support.annotation.Nullable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.AttributeSet;
+import android.util.Log;
 import android.view.View;
 
-import com.example.emily.simplehealthtracker.data.EntryAdapter;
+import com.example.emily.simplehealthtracker.data.Entry;
 import com.example.emily.simplehealthtracker.data.EntryViewModel;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class SimpleActivity extends AppCompatActivity  {
+
     EntryViewModel entryViewModel;
     XmlClickable fragmentButton;
 
+    private static final String TAG_TAG = "tag";
     private static final String CHECK_TAG = "check";
     private static final String NOTE_TAG = "note";
     private static final String REMIND_TAG = "remind";
     private static final String TRACK_TAG = "track";
+
+    private Fragment mFragment;
+
+    private List<Entry> entryList = new ArrayList<>();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_simple);
 
-        ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
 
+
+        if (savedInstanceState == null) {
+            ActionBar actionBar = getSupportActionBar();
+            actionBar.setDisplayHomeAsUpEnabled(true);
+
+
+            entryViewModel = ViewModelProviders.of(this).get(EntryViewModel.class);
+
+
+
+            FragmentManager fragmentManager = getSupportFragmentManager();
+
+
+                SimpleMenuFragment simpleMenuFragment = new SimpleMenuFragment();
+                fragmentManager.beginTransaction()
+                        .add(R.id.simple_fragment_container, simpleMenuFragment)
+                        //.addToBackStack(null)
+                        .commit();
+                fragmentManager.executePendingTransactions();
+                mFragment = simpleMenuFragment;
+
+
+        }
+
+        else {
+            fragmentButton = (XmlClickable) getSupportFragmentManager().getFragment(savedInstanceState, TAG_TAG);
+            mFragment = getSupportFragmentManager().getFragment(savedInstanceState, TAG_TAG);
+        }
+    }
+
+    @Override
+    protected void onSaveInstanceState(Bundle outState) {
+        super.onSaveInstanceState(outState);
+        getSupportFragmentManager().putFragment(outState, TAG_TAG, mFragment);
+    }
+
+    @Override
+    public View onCreateView(View parent, String name, final Context context, AttributeSet attrs) {
         entryViewModel = ViewModelProviders.of(this).get(EntryViewModel.class);
 
-        FragmentManager fragmentManager = getSupportFragmentManager();
+        entryViewModel.getNextReminder().observe(this, new Observer<Entry>() {
+            @Override
+            public void onChanged(@Nullable Entry entry) {
+                if (entry == null){
+                    NextAlarmWidgetProvider.updateWithNewReminder(context, "", 0);
+                } else {
+                    NextAlarmWidgetProvider.updateWithNewReminder(context,
+                            entry.getDescription(),
+                            entry.getTimeStamp());
+                }
+            }
+        });
 
-        Intent intent = getIntent();
-        if (intent.hasExtra(RemindFragment.OPEN_FRAGMENT)
-                && intent.getStringExtra(RemindFragment.OPEN_FRAGMENT).equals(RemindFragment.CHECK_FRAGMENT)) {
-            SimpleMenuFragment simpleMenuFragment = new SimpleMenuFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.simple_fragment_container, simpleMenuFragment)
-                    //.addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-
-            CheckFragment checkFragment = new CheckFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.simple_fragment_container, checkFragment)
-                    //.addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-        } else {
-            SimpleMenuFragment simpleMenuFragment = new SimpleMenuFragment();
-            fragmentManager.beginTransaction()
-                    .add(R.id.simple_fragment_container, simpleMenuFragment)
-                    //.addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-        }
+        return super.onCreateView(parent, name, context, attrs);
     }
 
     public void openTask(View view){
@@ -70,6 +109,7 @@ public class SimpleActivity extends AppCompatActivity  {
                     .commit();
             fragmentManager.executePendingTransactions();
             fragmentButton = checkFragment;
+            mFragment = checkFragment;
         }
 
         else if (taskId == R.id.btn_reminder && fragmentManager.findFragmentByTag(REMIND_TAG)== null) {
@@ -80,6 +120,7 @@ public class SimpleActivity extends AppCompatActivity  {
                     .commit();
             fragmentManager.executePendingTransactions();
             fragmentButton = remindFragment;
+            mFragment = remindFragment;
         }
 
         else if (taskId == R.id.btn_track && fragmentManager.findFragmentByTag(TRACK_TAG) == null){
@@ -91,6 +132,7 @@ public class SimpleActivity extends AppCompatActivity  {
                     .commit();
             fragmentManager.executePendingTransactions();
             fragmentButton = trackFragment;
+            mFragment = trackFragment;
         }
 
         else if (taskId == R.id.btn_note && fragmentManager.findFragmentByTag(NOTE_TAG) == null){
@@ -102,13 +144,14 @@ public class SimpleActivity extends AppCompatActivity  {
                     .commit();
             fragmentManager.executePendingTransactions();
             fragmentButton = noteFragment;
+            mFragment = noteFragment;
 
         }
 
     }
 
-    public void insertNewRecord(View v){
-        fragmentButton.insertNewRecordOrCancel(v);
+    public void handleButtonPush(View v){
+        fragmentButton.handleFragmentButtonPush(v);
     }
 
     public void checkOff(View v){
@@ -123,9 +166,10 @@ public class SimpleActivity extends AppCompatActivity  {
 
     public void showDatePickerDialog(View v){ fragmentButton.showDatePickerDialog(v); }
 
+    //implementation from Blundell at
+    //https://stackoverflow.com/questions/6091194/how-to-handle-button-clicks-using-the-xml-onclick-within-fragments
     public interface XmlClickable{
-        //TODO: not really ideal
-        void insertNewRecordOrCancel(View v);
+        void handleFragmentButtonPush(View v);
         void saveChanges(View v);
         void checkOff(View v);
         void showTimePickerDialog(View v);

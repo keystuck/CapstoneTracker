@@ -35,7 +35,6 @@ public class NoteFragment extends Fragment implements SimpleActivity.XmlClickabl
 
     EntryViewModel entryViewModel;
     List<Entry> entryList = new ArrayList<>();
-    private final static String LOG_TAG = NoteFragment.class.getSimpleName();
 
     public NoteFragment() {
         // Required empty public constructor
@@ -59,7 +58,6 @@ public class NoteFragment extends Fragment implements SimpleActivity.XmlClickabl
             public void onChanged(@Nullable List<Entry> entries) {
                 entryList = entries;
                 int last = entryList.size() - 1;
-                Log.d(LOG_TAG, "entered " + entryList.get(last).getDescription());
             }
         });
 
@@ -67,7 +65,7 @@ public class NoteFragment extends Fragment implements SimpleActivity.XmlClickabl
     }
 
     @Override
-    public void insertNewRecordOrCancel(View v) {
+    public void handleFragmentButtonPush(View v) {
         noteEditText.setText("");
     }
 

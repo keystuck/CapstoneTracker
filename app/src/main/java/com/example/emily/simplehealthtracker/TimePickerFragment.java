@@ -11,6 +11,7 @@ import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.EditText;
+import android.widget.TextView;
 import android.widget.TimePicker;
 
 import java.text.DateFormat;
@@ -36,14 +37,14 @@ public class TimePickerFragment extends DialogFragment implements TimePickerDial
     }
 
     public void onTimeSet(TimePicker view, int hourOfDay, int minute){
-        EditText et = (EditText) getActivity().findViewById(R.id.et_time);
+        TextView tv = (TextView) getActivity().findViewById(R.id.tv_time);
         Calendar cal = Calendar.getInstance();
         cal.setTimeInMillis(0);
         cal.set(0, 0, 0, hourOfDay, minute, 0);
         Date chosenTime = cal.getTime();
         DateFormat df = DateFormat.getTimeInstance(DateFormat.SHORT, Locale.US);
         String formattedTime = df.format(chosenTime);
-        et.setText(formattedTime);
+        tv.setText(formattedTime);
     }
 
     public TimePickerFragment() {

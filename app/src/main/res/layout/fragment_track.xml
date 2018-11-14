@@ -15,6 +15,18 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
+    <ScrollView
+        android:id="@+id/scrollView_track"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_track"
+        app:layout_constraintBottom_toTopOf="@id/button">
+        <LinearLayout
+            android:orientation="vertical"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
 
     <TextView
         android:id="@+id/tv_desc_label"
@@ -45,7 +57,6 @@
         android:id="@+id/et_amplitude"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:numeric="integer"
         android:inputType="number"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/tv_amplitude" />
@@ -53,26 +64,47 @@
 
 
 
-    <EditText
-        android:id="@+id/et_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        app:layout_constraintTop_toBottomOf="@id/et_amplitude"
-        android:hint="@string/date_description"
-        android:onClick="showDatePickerDialog"/>
 
-    <EditText
-        android:id="@+id/et_time"
-        android:layout_width="match_parent"
+
+
+    <Button
+        android:id="@+id/btn_choose_date"
+        android:onClick="showDatePickerDialog"
+        android:text="@string/date_description"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/et_amplitude"
+        android:background="@color/colorSimple"/>
+
+    <TextView
+        android:id="@+id/tv_date"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/btn_choose_date"
+        app:layout_constraintLeft_toRightOf="@id/btn_choose_date" />
+
+    <Button
+        android:id="@+id/btn_choose_time"
+        android:onClick="showTimePickerDialog"
+        android:text="@string/time_description"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="8dp"
-        app:layout_constraintTop_toBottomOf="@id/et_date"
-        android:ems="10"
-        android:hint="@string/time_description"
-        android:onClick="showTimePickerDialog"
-        android:inputType="time"/>
+        app:layout_constraintTop_toBottomOf="@id/btn_choose_date"
+        android:background="@color/colorSimple"/>
+
+    <TextView
+        android:id="@+id/tv_time"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textSize="20sp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginStart="8dp"
+        app:layout_constraintBottom_toBottomOf="@id/btn_choose_time"
+        app:layout_constraintLeft_toRightOf="@id/btn_choose_time" />
 
 
 
@@ -80,24 +112,27 @@
         android:id="@+id/tv_type_label"
         android:text="@string/type_description"
         android:layout_width="match_parent"
-        app:layout_constraintTop_toBottomOf="@id/et_time"
+        app:layout_constraintTop_toBottomOf="@id/btn_choose_time"
         android:layout_height="wrap_content" />
+
     <Spinner
         android:id="@+id/sp_type"
         android:layout_width="match_parent"
         app:layout_constraintTop_toBottomOf="@id/tv_type_label"
         android:layout_height="wrap_content" />
-
+        </LinearLayout></ScrollView>
 
     <Button
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/check"
-        android:onClick="insertNewRecord"
+        android:onClick="handleButtonPush"
         android:text="@string/save"
-        app:layout_constraintTop_toBottomOf="@id/sp_type"
+        app:layout_constraintTop_toBottomOf="@id/scrollView_track"
+        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
         tools:text="@string/save" />
 
 

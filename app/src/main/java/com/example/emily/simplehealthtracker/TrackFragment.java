@@ -4,6 +4,7 @@ package com.example.emily.simplehealthtracker;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -17,6 +18,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.emily.simplehealthtracker.data.Entry;
@@ -25,6 +27,7 @@ import com.example.emily.simplehealthtracker.data.EntryViewModel;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -38,16 +41,16 @@ import butterknife.ButterKnife;
 public class TrackFragment extends Fragment implements SimpleActivity.XmlClickable, AdapterView.OnItemSelectedListener {
     @BindView(R.id.et_description) EditText descriptionView;
     @BindView(R.id.et_amplitude) EditText amplitudeView;
-    @BindView(R.id.et_date) EditText dateView;
-    @BindView(R.id.et_time) EditText timeView;
+    @BindView(R.id.tv_date) TextView dateView;
+    @BindView(R.id.tv_time) TextView timeView;
     @BindView(R.id.sp_type)
     Spinner typeView;
     @BindView(R.id.button) Button saveButton;
 
     private EntryViewModel entryViewModel;
     private List<Entry> mEntryList = new ArrayList<>();
-    private static final String LOG_TAG = TrackFragment.class.getSimpleName();
 
+    private static final String FIELDS_INFO = "fields";
     private String entryType;
 
 
@@ -73,7 +76,6 @@ public class TrackFragment extends Fragment implements SimpleActivity.XmlClickab
             @Override
             public void onChanged(@Nullable List<Entry> entries) {
                 mEntryList = entries;
-                Log.d(LOG_TAG, "List has " + mEntryList.size() + " entries");
             }
         });
 
@@ -85,10 +87,56 @@ public class TrackFragment extends Fragment implements SimpleActivity.XmlClickab
         typeView.setOnItemSelectedListener(this);
 
 
+        if (savedInstanceState != null && savedInstanceState.getStringArrayList(FIELDS_INFO) != null){
+            ArrayList<String> fields = savedInstanceState.getStringArrayList(FIELDS_INFO);
+            descriptionView.setText(fields.get(0));
+            amplitudeView.setText(fields.get(1));
+            dateView.setText(fields.get(2));
+            timeView.setText(fields.get(3));
+            String type = fields.get(4);
+            if (type.equals(getResources().getString(R.string.no_type))){
+                typeView.setSelection(0);
+            } else {
+                boolean found = false;
+                ArrayList<String> resourcesArray = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.types_array)));
+                for (int i = 0; i < resourcesArray.size(); i++){
+                    if (resourcesArray.get(i).equals(type)){
+                        found = true;
+                        typeView.setSelection(i);
+                        break;
+                    }
+                }
+                if (found == false){
+                    typeView.setSelection(0);
+                }
+            }
+        }
         return rootView;
     }
+
     @Override
-    public void insertNewRecordOrCancel(View view) {
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+
+
+        ArrayList<String> fieldContents = new ArrayList<>();
+        fieldContents.add(descriptionView.getText().toString());
+        fieldContents.add(amplitudeView.getText().toString());
+        fieldContents.add(dateView.getText().toString());
+        fieldContents.add(timeView.getText().toString());
+        if (entryType != null){
+            fieldContents.add(entryType);
+        } else {
+            fieldContents.add(getResources().getString(R.string.no_type));
+        }
+        outState.putStringArrayList(FIELDS_INFO, fieldContents);
+
+
+
+    }
+
+    @Override
+    public void handleFragmentButtonPush(View view) {
         final String thingToTrack = descriptionView.getText().toString();
         String amplitude = amplitudeView.getText().toString();
         int ampInt = 0;
@@ -103,10 +151,8 @@ public class TrackFragment extends Fragment implements SimpleActivity.XmlClickab
         String date = dateView.getText().toString();
         String enteredTime = timeView.getText().toString();
         String fullTime;
-        //TODO: ADD DATA VALIDATION
         if (date != null && enteredTime != null){
             fullTime = date + " " + enteredTime;
-            Log.d(LOG_TAG, "entered: " + fullTime);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy K:mm aa");
 
             try {
@@ -132,6 +178,11 @@ public class TrackFragment extends Fragment implements SimpleActivity.XmlClickab
         });
 
         Toast.makeText(getContext(), getResources().getString(R.string.add_OK), Toast.LENGTH_SHORT).show();
+
+        descriptionView.setText("");
+        amplitudeView.setText("");
+        dateView.setText("");
+        timeView.setText("");
     }
 
 
@@ -148,7 +199,6 @@ public class TrackFragment extends Fragment implements SimpleActivity.XmlClickab
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d(LOG_TAG, "setting entryType");
         entryType = adapterView.getItemAtPosition(i).toString();
 
     }
@@ -171,12 +221,12 @@ public class TrackFragment extends Fragment implements SimpleActivity.XmlClickab
 
     public void showTimePickerDialog(View v){
         DialogFragment newFragment = new TimePickerFragment();
-        newFragment.show(getActivity().getSupportFragmentManager(), "timePicker");
+        newFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.time_picker));
 
     }
     public void showDatePickerDialog(View v){
         DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getActivity().getSupportFragmentManager(), "datePicker");
+        newFragment.show(getActivity().getSupportFragmentManager(), getResources().getString(R.string.date_picker));
     }
 
 }

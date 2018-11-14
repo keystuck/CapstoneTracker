@@ -2,12 +2,13 @@
     <string name="app_name">SimpleHealthTracker</string>
 
     <string name="widget_content_desc">Next Reminder</string>
+    <string name="widget_failure_text">Unable to retrieve next reminder</string>
 
     <string name="simple">Simple Menu</string>
     <string name="detailed">Detailed Menu</string>
 
     <string name="check">Check Item Off a List</string>
-    <string name="track">Enter an Action</string>
+    <string name="track">Enter an Event</string>
     <string name="note">Record a Note</string>
     <string name="reminder">Set a Reminder</string>
 
@@ -15,7 +16,9 @@
     <string name="cancel">Cancel</string>
     <string name="delete">Delete Selected</string>
     <string name="search">Search</string>
+
     <string name="share">Send Report</string>
+    <string name="settings">Settings</string>
 
     <string name="desc">Description</string>
     <string name="dose">Dosage</string>
@@ -27,8 +30,8 @@
     <string name="reminder_example">Example: Warfarin</string>
     <string name="track_example">Example: Pain Level</string>
     <string name="amplitude_description">Amount (if not relevant, enter 1)</string>
-    <string name="date_description">Click for date dialog (if today, leave blank)</string>
-    <string name="time_description">Click for time dialog (if now, leave blank)</string>
+    <string name="date_description">Click to choose date</string>
+    <string name="time_description">Click to choose time</string>
     <string name="type_description">Type of record</string>
     <string name="from_date_hint">Click to choose earliest date to display (for all, leave blank)</string>
     <string name="to_date_hint">Click to choose latest date to display (for present, leave blank)</string>
@@ -70,8 +73,22 @@
     <string name="date_picker" translatable="false">datePicker</string>
     <string name="to_date_picker" translatable="false">toDatePicker</string>
 
-    <!-- TODO: Remove or change this placeholder text -->
-    <string name="hello_blank_fragment">Hello blank fragment</string>
-    <string name="appwidget_text">EXAMPLE</string>
+    <string name="appwidget_text">Next Reminder</string>
     <string name="add_widget">Add widget</string>
+
+    <string name="pref_size_label">Choose Size</string>
+    <string name="pref_size_normal">Standard</string>
+    <string name="pref_size_large">Larger</string>
+    <string name="pref_size_xlarge">Largest</string>
+    
+    <string name="pref_size_key" translatable="false">size</string>
+    <string name="pref_size_normal_value" translatable="false">standard</string>
+    <string name="pref_size_large_value" translatable="false">larger</string>
+    <string name="pref_size_xlarge_value" translatable="false">largest</string>
+
+    <string name="hello_blank_fragment">where?</string>
+    <string name="no_type" translatable="false">no_type</string>
+    <string name="early_date" translatable="false">Jan 1, 1900</string>
+    <string name="widget_title">SimpleHealthTracker next reminder:</string>
+
 </resources>

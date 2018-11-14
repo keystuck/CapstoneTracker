@@ -10,8 +10,8 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class EntryViewModel extends AndroidViewModel {
+
     private LiveData<List<Entry>> entryList;
-    private static final String LOG_TAG = EntryViewModel.class.getSimpleName();
 
     public EntryViewModel(@NonNull Application application) {
         super(application);
@@ -27,7 +27,6 @@ public class EntryViewModel extends AndroidViewModel {
 
     public LiveData<List<Entry>> getUndone(){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
-
         return mDb.entryDao().findUntakenMeds();
     }
 
@@ -46,35 +45,21 @@ public class EntryViewModel extends AndroidViewModel {
         for (Entry entry : entriesToDelete){
                 mDb.entryDao().deleteEntry(entry);
         }
-    }
+        }
 
     public LiveData<List<Entry>> getEntriesWithReminders(long startTime){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
-        return mDb.entryDao().findWithReminder(startTime);
+        LiveData<List<Entry>> entries = mDb.entryDao().findWithReminder(startTime);
+        return entries;
     }
-
-    //TODO delete this
-    public long getIdFromTime(String desc, long time){
-        SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
-
-        LiveData<List<Entry>> tempList = mDb.entryDao().findByDescAndTime(desc, time, time);
-        if (!(tempList == null)){
-            return tempList.getValue().get(0).getEntryId();
-        } else {
-            return 0;
-        }
-    }
-
 
     public void loadEntries(){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
-
         entryList = mDb.entryDao().getAll();
     }
 
     public long addEntry(String desc){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
-
 
         Entry tempEntry = new Entry(desc, 0, 0, System.currentTimeMillis(), "MEDS", 0);
         long id = mDb.entryDao().insertEntry(tempEntry);
@@ -88,7 +73,6 @@ public class EntryViewModel extends AndroidViewModel {
     public long addEntry(String desc, int amplitude, int taken, long timestamp, String type, int reminderSet){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
 
-
         Entry tempEntry = new Entry(desc, amplitude, taken, timestamp, type, reminderSet);
         long id = mDb.entryDao().insertEntry(tempEntry);
         if (mDb.entryDao().getAll() == null){
@@ -98,13 +82,22 @@ public class EntryViewModel extends AndroidViewModel {
         else return id;
     }
 
+    public long addEntry(Entry entry){
+        SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
+        long id = mDb.entryDao().insertEntry(entry);
+        return id;
+    }
+
 
     public void checkOffScheduledItems(List<Integer> inputIds){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
-        Log.d(LOG_TAG, "about to call entryDao.checkOffScheduled with " + inputIds.size());
         for (Integer inputId : inputIds) {
             mDb.entryDao().checkOffScheduled(inputId, System.currentTimeMillis());
         }
     }
 
+    public LiveData<Entry> getNextReminder(){
+        SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
+        return mDb.entryDao().getEarliestFutureEntry(System.currentTimeMillis());
+    }
 }

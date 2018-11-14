@@ -30,10 +30,9 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
     final private EntryClickListener mEntryClickListener;
     private Context context;
 
-    private final static String LOG_TAG = EntryAdapter.class.getSimpleName();
-
+    //taken from
     //https://android.jlelse.eu/android-handling-checkbox-state-in-recycler-views-71b03f237022
-    private SparseBooleanArray sparseBooleanArray = new SparseBooleanArray();
+    private SparseBooleanArrayParcelable sparseBooleanArray;
 
     Entry currentItem;
 
@@ -49,19 +48,18 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         this.context = context;
         mEntryList = entryList;
         this.highlightMissed = highlightMissed;
-        //TODO: MIGHT NEED
-//        if (listener != null){
             mEntryClickListener = listener;
-//        }
+        sparseBooleanArray = new SparseBooleanArrayParcelable();
     }
 
-    public SparseBooleanArray getSparseBooleanArray() {
+    public SparseBooleanArrayParcelable getSparseBooleanArray() {
         return sparseBooleanArray;
     }
 
     public void clearSparseBooleanArray(){
         sparseBooleanArray.clear();
     }
+
 
     public Entry getCurrentItem(int position){
         return mEntryList.get(position);
@@ -85,17 +83,11 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         //if this is for a report, get info from the record
         //also highlight missed tasks
         if (highlightMissed) {
-            holder.doneBox.setVisibility(View.VISIBLE);
             if (currentItem.getTaken() == 0) {
-                holder.doneBox.setChecked(false);
-
-                //for a report, if it hasn't been done and is past due, show in red
                 if (Long.parseLong(holder.longDateView.getText().toString()) < System.currentTimeMillis()){
                     holder.itemHolder.setBackgroundColor(context.getResources().getColor(R.color.track));
                 }
 
-            } else {
-                holder.doneBox.setChecked(true);
             }
             holder.typeView.setText(currentItem.getRecordType());
         }
@@ -104,6 +96,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             int adapterPosition = holder.getAdapterPosition();
             if (sparseBooleanArray.get(adapterPosition)){
                 holder.doneBox.setChecked(true);
+                holder.doneBox.setBackgroundColor(context.getResources().getColor(R.color.check));
             } else {
                 holder.doneBox.setChecked(false);
             }
@@ -117,23 +110,14 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
 
     public void clear(){
         mEntryList.clear();
+        sparseBooleanArray.clear();
     }
 
     public void addAll(List<Entry> inputList){
         mEntryList.addAll(inputList);
     }
 
-/*    public void clickBox(View view){
-        int adapterPosition = getAdapterPosition();
-        if (sparseBooleanArray.get(adapterPosition) == false){
-            doneBox.setChecked(true);
-            sparseBooleanArray.put(adapterPosition, true);
-        } else {
-            doneBox.setChecked(false);
-            sparseBooleanArray.put(adapterPosition, false);
-        }
-    }
-*/
+
 
     class EntryViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
 
@@ -160,16 +144,21 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             super(itemView);
             ButterKnife.bind(this, itemView);
             itemView.setOnClickListener(this);
+
+            if (highlightMissed){
+                checkView.setText(R.string.to_cancel_delete);
+            } else {
+                checkView.setText(R.string.to_check_off);
+            }
+
         }
 
 
 
         @Override
         public void onClick(View view) {
-            Log.d(LOG_TAG, "in adapter's onClick");
             if (mEntryClickListener != null) {
                 int adapterPosition = getAdapterPosition();
-                Log.d(LOG_TAG, "adapter position: " + adapterPosition);
                 mEntryClickListener.onEntryClick(adapterPosition);
 
                 if (sparseBooleanArray.get(adapterPosition) == false){
@@ -180,21 +169,18 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
                         checkView.setText(R.string.will_check_off);
                     }
                     checkView.setBackgroundColor(context.getResources().getColor(R.color.check));
-                    Log.d(LOG_TAG, "adding true at adapter pos " + adapterPosition);
                     sparseBooleanArray.put(adapterPosition, true);
                 } else {
                     doneBox.setChecked(false);
-                    if (highlightMissed){
-                        checkView.setText(R.string.to_cancel_delete);
-                    } else {
-                        checkView.setText(R.string.to_check_off);
-                    }
+
                     checkView.setBackgroundColor(context.getResources().getColor(R.color.white));
                     sparseBooleanArray.put(adapterPosition, false);
                 }
             }
         }
     }
+
+
 
     public String convertDate(long timestamp){
         Date date = new Date(timestamp);

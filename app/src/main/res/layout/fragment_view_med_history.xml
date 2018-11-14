@@ -19,56 +19,14 @@
         app:layout_constraintTop_toTopOf="parent"
         />
 
-    <TextView
-        android:id="@+id/tv_from_label"
-        android:text="@string/from_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/label_medhistory"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-    <EditText
-        android:id="@+id/et_date"
-        android:hint="@string/from_date_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="showDatePickerDialog"
-        app:layout_constraintTop_toBottomOf="@id/tv_from_label"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-    <TextView
-        android:id="@+id/tv_to_label"
-        android:text="@string/to_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/et_date"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-    <EditText
-        android:id="@+id/et_to"
-        android:hint="@string/to_date_hint"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:onClick="showToDatePickerDialog"
-        app:layout_constraintTop_toBottomOf="@id/tv_to_label"
-        app:layout_constraintLeft_toLeftOf="parent"/>
-
-
-    <Button
-        android:id="@+id/btn_search"
-        android:text="@string/search"
-        android:background="@color/save"
-        android:onClick="insertNewRecord"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toBottomOf="@id/et_to"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintRight_toRightOf="parent"/>
-
 
     <android.support.v7.widget.RecyclerView
         android:id="@+id/rv_medhistory"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"
+        android:layout_height="0dp"
         app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/btn_search"
+        app:layout_constraintBottom_toTopOf="@id/btn_remove"
+        app:layout_constraintTop_toBottomOf="@id/label_medhistory"
         />
 
     <Button
@@ -78,7 +36,7 @@
         android:text="@string/delete"
         android:background="@color/save"
         android:textSize="20sp"
-        android:onClick="saveChanges"
+        android:onClick="handleButtonClick"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"/>

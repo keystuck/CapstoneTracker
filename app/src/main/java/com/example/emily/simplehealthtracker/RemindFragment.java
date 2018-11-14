@@ -11,6 +11,7 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
@@ -25,12 +26,17 @@ import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
 import android.widget.EditText;
 import android.widget.Spinner;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.emily.simplehealthtracker.data.Entry;
 import com.example.emily.simplehealthtracker.data.EntryViewModel;
 
+import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 
@@ -38,25 +44,41 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class RemindFragment extends Fragment implements SimpleActivity.XmlClickable, AdapterView.OnItemSelectedListener {
-    private static final String LOG_TAG = RemindFragment.class.getSimpleName();
     private List<Entry> entryList;
     private EntryViewModel entryViewModel;
     @BindView(R.id.et_description) EditText etDescription;
     @BindView(R.id.et_dose) EditText etDose;
-    @BindView(R.id.et_date) EditText etDate;
-    @BindView(R.id.et_time) EditText etTime;
+    @BindView(R.id.tv_date) TextView tvDate;
+    @BindView(R.id.tv_time) TextView tvTime;
     @BindView(R.id.sp_type) Spinner spType;
 
     private String entryType;
     public static final String ALARM_TEXT = "description";
     public static final String OPEN_FRAGMENT = "fragment";
     public static final String CHECK_FRAGMENT = "check";
+    public static final String FIELDS_INFO = "fields";
 
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         entryViewModel = ViewModelProviders.of(getActivity()).get(EntryViewModel.class);
+    }
+
+    @Override
+    public void onSaveInstanceState(@NonNull Bundle outState) {
+        super.onSaveInstanceState(outState);
+        ArrayList<String> fieldContents = new ArrayList<>();
+        fieldContents.add(etDescription.getText().toString());
+        fieldContents.add(etDose.getText().toString());
+        fieldContents.add(tvDate.getText().toString());
+        fieldContents.add(tvTime.getText().toString());
+        if (entryType != null){
+            fieldContents.add(entryType);
+        } else {
+            fieldContents.add(getResources().getString(R.string.no_type));
+        }
+        outState.putStringArrayList(FIELDS_INFO, fieldContents);
     }
 
     @Override
@@ -78,10 +100,34 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
 
         spType.setOnItemSelectedListener(this);
 
+        if (savedInstanceState != null && savedInstanceState.getStringArrayList(FIELDS_INFO) != null){
+            ArrayList<String> fields = savedInstanceState.getStringArrayList(FIELDS_INFO);
+            etDescription.setText(fields.get(0));
+            etDose.setText(fields.get(1));
+            tvDate.setText(fields.get(2));
+            tvTime.setText(fields.get(3));
+            String type = fields.get(4);
+            if (type.equals(getResources().getString(R.string.no_type))){
+                spType.setSelection(0);
+            } else {
+                boolean found = false;
+                ArrayList<String> resourcesArray = new ArrayList<String>(Arrays.asList(getResources().getStringArray(R.array.types_array)));
+                for (int i = 0; i < resourcesArray.size(); i++){
+                    if (resourcesArray.get(i).equals(type)){
+                        found = true;
+                        spType.setSelection(i);
+                        break;
+                    }
+                }
+                if (found == false){
+                    spType.setSelection(0);
+                }
+            }
+        }
         return rootView;
     }
 
-    public void insertNewRecordOrCancel(View view){
+    public void handleFragmentButtonPush(View view){
         String descriptionString = etDescription.getText().toString();
         String dose = etDose.getText().toString();
         if (!dose.isEmpty()){
@@ -92,17 +138,16 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
         final int amp = 0;
         final int taken = 0;
         long reminderTime = System.currentTimeMillis();
-        String date = etDate.getText().toString();
-        String enteredTime = etTime.getText().toString();
-        //TODO: ADD DATA VALIDATION
+        String date = tvDate.getText().toString();
+        String enteredTime = tvTime.getText().toString();
         if (date != null && enteredTime != null){
             String fullTime = date + " " + enteredTime;
-            Log.d(LOG_TAG, "entered: " + fullTime);
             SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy K:mm aa");
 
             try {
                 Date mDate = simpleDateFormat.parse(fullTime);
                 reminderTime = mDate.getTime();
+
             } catch (ParseException e) {
                 e.printStackTrace();
             }
@@ -116,15 +161,37 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
         }
         final String type = entryType;
 
+        final Entry currentEntry = new Entry(augDescription, amp, taken, time, type, 1);
+
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                entryViewModel.addEntry(augDescription, amp, taken, time, type, 1);
+                entryViewModel.addEntry(currentEntry);
             }
         });
 
+        Entry earliestEntry = currentEntry;
+        for (Entry entry : entryList){
+            if (entry.getTimeStamp() < earliestEntry.getTimeStamp() &&
+                    entry.getTimeStamp() > System.currentTimeMillis()){
+                earliestEntry = entry;
+            }
+        }
+        if (earliestEntry.getTimeStamp() > System.currentTimeMillis()){
+            NextAlarmWidgetProvider.updateWithNewReminder(getActivity(), earliestEntry.getDescription(), earliestEntry.getTimeStamp());
+        } else {
+            NextAlarmWidgetProvider.updateWithNewReminder(getActivity(), "", 0);
+        }
+
         int id = generateId(augDescription, time);
         setAlarm(getActivity(), AlarmReceiver.class, time, id, augDescription);
+
+        Toast.makeText(getActivity(), getResources().getString(R.string.add_OK), Toast.LENGTH_SHORT).show();
+        etDescription.setText("");
+        etDose.setText("");
+        tvDate.setText("");
+        tvTime.setText("");
+
     }
 
     public static int generateId(String description, long time){
@@ -135,7 +202,6 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
 
     @Override
     public void onItemSelected(AdapterView<?> adapterView, View view, int i, long l) {
-        Log.d(LOG_TAG, "setting entryType");
         entryType = adapterView.getItemAtPosition(i).toString();
 
     }
@@ -157,7 +223,6 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
 
     @Override
     public void saveChanges(View v) {
-        //TODO: Yuck
     }
 
     @Override
@@ -180,8 +245,6 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
     }
 
     public static void showNotification(Context context, Class<?> cls, String description){
-        Log.d(LOG_TAG, "showNotification now");
-
 
 
         Intent intent = new Intent(context, SimpleActivity.class);
@@ -208,12 +271,7 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
 
 
     public static void setAlarm(Context context, Class<?> cls, long alarmTime, int id, String description){
-/*        ComponentName receiver = new ComponentName(context, cls);
-        PackageManager pm = context.getPackageManager();
-        pm.setComponentEnabledSetting(receiver,
-                PackageManager.COMPONENT_ENABLED_STATE_ENABLED,
-                PackageManager.DONT_KILL_APP);
-*/
+
         Intent i = new Intent(context, cls);
         i.putExtra(ALARM_TEXT, description);
 
@@ -222,6 +280,8 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
         AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
         am.set(AlarmManager.RTC_WAKEUP, alarmTime,
                 pendingI);
+
+        long minutes = (alarmTime - System.currentTimeMillis())/60000;
     }
 
 

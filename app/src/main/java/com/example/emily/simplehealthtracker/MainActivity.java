@@ -2,22 +2,58 @@ package com.example.emily.simplehealthtracker;
 
 import android.app.NotificationChannel;
 import android.app.NotificationManager;
+import android.arch.lifecycle.LiveData;
+import android.arch.lifecycle.Observer;
+import android.arch.lifecycle.ViewModelProviders;
+import android.content.Context;
 import android.content.Intent;
+import android.os.AsyncTask;
 import android.os.Build;
+import android.support.annotation.Nullable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
+import android.view.Menu;
+import android.view.MenuInflater;
+import android.view.MenuItem;
 import android.view.View;
 
+import com.example.emily.simplehealthtracker.data.Entry;
+import com.example.emily.simplehealthtracker.data.EntryViewModel;
+import com.example.emily.simplehealthtracker.data.SHTDatabase;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.MobileAds;
+
+import java.util.ArrayList;
+import java.util.List;
+
+/* Emily Stuckey
+    November, 2018
+    Simple Health Tracker
+    for Udacity Nanodegree
+ */
 public class MainActivity extends AppCompatActivity {
 
     public static final String CHANNEL_ID = "SH";
+    private static final String ADMOB_ID = "";
+    private AdView mAdView;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+
         createNotificationChannel();
+        MobileAds.initialize(this, ADMOB_ID);
+
+        mAdView = findViewById(R.id.adView);
+        AdRequest adRequest = new AdRequest.Builder().build();
+        mAdView.loadAd(adRequest);
     }
+
+
 
     public void startSimpleOrDetailed(View view){
         if (view.getId() == R.id.btn_simple) {
@@ -41,4 +77,5 @@ public class MainActivity extends AppCompatActivity {
             notificationManager.createNotificationChannel(channel);
         }
     }
+
 }

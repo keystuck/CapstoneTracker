@@ -5,11 +5,13 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
+import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -19,6 +21,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.TextView;
 
 import com.example.emily.simplehealthtracker.data.Entry;
 import com.example.emily.simplehealthtracker.data.EntryAdapter;
@@ -34,20 +37,20 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 
+
+
 /**
  * A simple {@link Fragment} subclass.
  */
 public class ViewMedHistoryFragment extends Fragment implements DetailedActivity.XmlClickable, EntryAdapter.EntryClickListener {
-    private final static String LOG_TAG = ViewMedHistoryFragment.class.getSimpleName();
 
     private EntryAdapter mEntryAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
+    private static final String LOG_TAG = ViewMedHistoryFragment.class.getSimpleName();
+
     @BindView(R.id.rv_medhistory) RecyclerView mRecyclerView;
     @BindView(R.id.btn_remove) Button removeButton;
-    @BindView(R.id.et_date) EditText fromDate;
-    @BindView(R.id.et_to) EditText toDate;
-    @BindView(R.id.btn_search) Button searchButton;
 
     private EntryViewModel entryViewModel;
     private List<Entry> entryList = new ArrayList<Entry>();
@@ -99,9 +102,9 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
         ButterKnife.bind(this, rootView);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
-
-        //TODO: change this
- /*       entryViewModel.getEntriesOfType(getResources().getString(R.string.type_meds)).observe(this, new Observer<List<Entry>>() {
+        mRecyclerView.addItemDecoration(new TaskDecoration(getActivity()));
+        entryViewModel.getEntriesTypeTime(getResources().getString(R.string.type_meds),
+                0, System.currentTimeMillis()).observe(this, new Observer<List<Entry>>() {
             @Override
             public void onChanged(@Nullable List<Entry> entries) {
                 entryList = entries;
@@ -110,7 +113,6 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
                 mRecyclerView.setAdapter(mEntryAdapter);
             }
         });
-*/
         mEntryAdapter = new EntryAdapter(getActivity(), entryList, true, this);
 
 
@@ -125,55 +127,18 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
     }
 
     @Override
-    public void insertNewRecordOrCancel(View v) {
-        String beginDate = fromDate.getText().toString();
-        String endDate = toDate.getText().toString();
-        long beginMillis = 0;
-        long endMillis = System.currentTimeMillis();
-        if (beginDate.isEmpty()){
-            beginDate = "Jan 1, 1900";
-        }
-        String fullDate = beginDate.concat(" 12:00 am");
-        SimpleDateFormat simpleDateFormat = new SimpleDateFormat("MMM dd, yyyy K:mm aa");
-
-        try {
-            Date mDate = simpleDateFormat.parse(fullDate);
-            beginMillis = mDate.getTime();
-        } catch (ParseException e) {
-            e.printStackTrace();
-        }
-
-
-        //TODO: enforce from before to
-        if (!endDate.isEmpty()){
-            fullDate = endDate.concat(" 11:59 pm");
-
-            try {
-                Date mDate = simpleDateFormat.parse(fullDate);
-                endMillis = mDate.getTime();
-            } catch (ParseException e){
-                e.printStackTrace();
-            }
-        }
-
-        final long startMillis = beginMillis;
-        final long stopMillis = endMillis;
+    public void onSearchClicked(View v) {
+/*
+        final long startMillis = 0;
+        final long stopMillis = System.currentTimeMillis();
         //Use dates to retrieve info
-        entryViewModel.getEntriesTypeTime(getResources().getString(R.string.type_meds),
-                startMillis, stopMillis).observe(this, new Observer<List<Entry>>() {
-            @Override
-            public void onChanged(@Nullable List<Entry> entries) {
-                entryList = entries;
-                mEntryAdapter.clear();
-                mEntryAdapter.addAll(entries);
-                mRecyclerView.setAdapter(mEntryAdapter);
-            }
-        });
 
+*/
     }
 
+
     @Override
-    public void saveChanges(View v) {
+    public void handleButtonClick(View v) {
         SparseBooleanArray sparseBooleanArray = mEntryAdapter.getSparseBooleanArray();
         for (int i = 0; i < sparseBooleanArray.size(); i++){
             int key = sparseBooleanArray.keyAt(i);
@@ -194,23 +159,15 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
 
 
 
-    @Override
-    public void checkOff(View v) { }
 
     @Override
     public void showTimePickerDialog(View v) { }
 
     @Override
     public void showDatePickerDialog(View w) {
-        DialogFragment newFragment = new DatePickerFragment();
-        newFragment.show(getActivity().getSupportFragmentManager(),
-                getResources().getString(R.string.date_picker));
     }
 
     @Override
     public void showToDatePickerDialog(View v) {
-        DialogFragment newFragment = new ToDatePickerFragment();
-        newFragment.show(getActivity().getSupportFragmentManager(),
-                getResources().getString(R.string.to_date_picker));
     }
 }

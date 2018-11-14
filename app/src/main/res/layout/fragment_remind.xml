@@ -17,78 +17,110 @@
         android:layout_height="wrap_content" />
 
     <ScrollView
-        app:layout_constraintTop_toBottomOf="@id/label_remind"
+        android:id="@+id/scrollView_remind"
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="0dp"
+        android:layout_marginTop="40dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/label_remind"
+        app:layout_constraintBottom_toTopOf="@id/button">
 
         <LinearLayout
-            android:orientation="vertical"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-    <TextView
-        android:id="@+id/tv_desc_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="@string/desc"
-        android:layout_marginTop="16dp" />
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
 
-    <EditText
-        android:id="@+id/et_description"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        tools:text="@string/reminder_example" />
+            <TextView
+                android:id="@+id/tv_desc_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="16dp"
+                android:text="@string/desc" />
 
-    <TextView
-        android:id="@+id/tv_dose_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Dosage" />
+            <EditText
+                android:id="@+id/et_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:ems="10"
+                tools:text="@string/reminder_example" />
 
-    <EditText
-        android:id="@+id/et_dose"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="textPersonName" />
+            <TextView
+                android:id="@+id/tv_dose_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Dosage" />
 
-    <TextView
-        android:id="@+id/tv_datetime_label"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="Date and Time" />
+            <EditText
+                android:id="@+id/et_dose"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:ems="10"
+                android:inputType="textPersonName" />
 
+            <TextView
+                android:id="@+id/tv_datetime_label"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="Date and Time" />
 
-    <EditText
-        android:id="@+id/et_date"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:ems="10"
-        android:inputType="date"
-        android:hint="@string/date_description"
-        android:onClick="showDatePickerDialog"/>
-    <EditText
-        android:id="@+id/et_time"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="8dp"
-        android:ems="10"
-        android:hint="@string/time_description"
-        android:onClick="showTimePickerDialog"
-        android:inputType="time"/>
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_choose_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@color/colorSimple"
+                    android:onClick="showDatePickerDialog"
+                    android:text="@string/date_description" />
 
 
+                <TextView
+                    android:id="@+id/tv_date"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="20sp" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/btn_choose_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginTop="8dp"
+                    android:background="@color/colorSimple"
+                    android:onClick="showTimePickerDialog"
+                    android:text="@string/time_description" />
+
+                <TextView
+                    android:id="@+id/tv_time"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_marginLeft="8dp"
+                    android:textSize="20sp" />
+
+            </LinearLayout>
 
             <TextView
                 android:id="@+id/tv_type_label"
-                android:text="@string/type_description"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="@string/type_description" />
+
+            <Spinner
+                android:id="@+id/sp_type"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content" />
-    <Spinner
-        android:id="@+id/sp_type"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content" />
         </LinearLayout>
     </ScrollView>
     <Button
@@ -96,9 +128,10 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/check"
-        android:onClick="insertNewRecord"
+        android:onClick="handleButtonPush"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/scrollView_remind"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         tools:text="@string/save" />

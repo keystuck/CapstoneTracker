@@ -30,7 +30,6 @@ import butterknife.ButterKnife;
  * A simple {@link Fragment} subclass.
  */
 public class ViewNotesFragment extends Fragment implements DetailedActivity.XmlClickable, EntryAdapter.EntryClickListener {
-    private final static String LOG_TAG = ViewNotesFragment.class.getSimpleName();
 
     private EntryAdapter mEntryAdapter;
     private LinearLayoutManager mLinearLayoutManager;
@@ -74,6 +73,7 @@ public class ViewNotesFragment extends Fragment implements DetailedActivity.XmlC
 
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new TaskDecoration(getActivity()));
 
         entryViewModel.getEntriesOfType(getResources().getString(R.string.type_note)).observe(this, new Observer<List<Entry>>() {
             @Override
@@ -94,7 +94,7 @@ public class ViewNotesFragment extends Fragment implements DetailedActivity.XmlC
     }
 
     @Override
-    public void saveChanges(View v) {
+    public void handleButtonClick(View v) {
         SparseBooleanArray sparseBooleanArray = mEntryAdapter.getSparseBooleanArray();
         for (int i = 0; i < sparseBooleanArray.size(); i++){
             int key = sparseBooleanArray.keyAt(i);
@@ -113,14 +113,14 @@ public class ViewNotesFragment extends Fragment implements DetailedActivity.XmlC
         }
     }
 
+
     @Override
-    public void insertNewRecordOrCancel(View v) { }
+    public void onSearchClicked(View v) {
+
+    }
 
     @Override
     public void onEntryClick(int selectedEntryIndex) { }
-
-    @Override
-    public void checkOff(View v) { }
 
     @Override
     public void showTimePickerDialog(View v) { }

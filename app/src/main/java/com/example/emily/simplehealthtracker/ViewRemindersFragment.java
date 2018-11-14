@@ -45,7 +45,6 @@ public class ViewRemindersFragment extends Fragment implements DetailedActivity.
     private EntryAdapter mEntryAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
-    private static final String LOG_TAG = ViewRemindersFragment.class.getSimpleName();
 
     @BindView(R.id.rv_viewreminders)
     RecyclerView mRecyclerView;
@@ -87,8 +86,8 @@ public class ViewRemindersFragment extends Fragment implements DetailedActivity.
         ButterKnife.bind(this, rootView);
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
+        mRecyclerView.addItemDecoration(new TaskDecoration(getActivity()));
 
-        Log.d(LOG_TAG, "in OnCreateView");
        entryViewModel.getEntriesWithReminders(System.currentTimeMillis()).observe(this, new Observer<List<Entry>>() {
             @Override
             public void onChanged(@Nullable List<Entry> entries) {
@@ -111,13 +110,9 @@ public class ViewRemindersFragment extends Fragment implements DetailedActivity.
 
     }
 
-    @Override
-    public void insertNewRecordOrCancel(View v) {
-
-    }
 
     @Override
-    public void saveChanges(View v) {
+    public void handleButtonClick(View v) {
         SparseBooleanArray sparseBooleanArray = mEntryAdapter.getSparseBooleanArray();
         for (int i = 0; i < sparseBooleanArray.size(); i++){
             int key = sparseBooleanArray.keyAt(i);
@@ -159,10 +154,10 @@ public class ViewRemindersFragment extends Fragment implements DetailedActivity.
         pendingIntent1.cancel();
     }
 
-
-
     @Override
-    public void checkOff(View v) { }
+    public void onSearchClicked(View v) {
+    }
+
 
     @Override
     public void showTimePickerDialog(View v) { }
