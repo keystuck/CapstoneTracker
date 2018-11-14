@@ -15,26 +15,21 @@
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete Selected</string>
-    <string name="search">Search</string>
 
     <string name="share">Send Report</string>
-    <string name="settings">Settings</string>
 
     <string name="desc">Description</string>
     <string name="dose">Dosage</string>
     <string name="date_and_time">Date and Time</string>
-    <string name="taken">Taken?</string>
-    <string name="from_date">From:</string>
-    <string name="to_date">To:</string>
 
     <string name="reminder_example">Example: Warfarin</string>
+    <string name="dose_example">Example: 2 pills</string>
+    <string name="amp_example">Enter a number between 1 and 10</string>
     <string name="track_example">Example: Pain Level</string>
     <string name="amplitude_description">Amount (if not relevant, enter 1)</string>
     <string name="date_description">Click to choose date</string>
     <string name="time_description">Click to choose time</string>
     <string name="type_description">Type of record</string>
-    <string name="from_date_hint">Click to choose earliest date to display (for all, leave blank)</string>
-    <string name="to_date_hint">Click to choose latest date to display (for present, leave blank)</string>
     <string name="from_date_reminder_hint">Click to choose earliest date to display (for today, leave blank)</string>
     <string name="to_date_reminder_hint">Click to choose latest date to display (for next two weeks, leave blank)</string>
     <string name="how_to_delete_reminders">To delete upcoming reminders, select desired items then press the delete button</string>
@@ -42,8 +37,6 @@
     <string name="add_OK">Record added successfully</string>
     <string name="add_error">Problem adding record</string>
 
-    <string name="view_settings">View settings: colors, fonts, sizes</string>
-    <string name="sound_settings">Sound settings: alerts, volume</string>
     <string name="notification_settings">View/Delete Reminders</string>
     <string name="notes_view">View/Delete Notes</string>
     <string name="reports">Generate reports to email/print</string>
@@ -71,24 +64,14 @@
 
     <string name="time_picker" translatable="false">timePicker</string>
     <string name="date_picker" translatable="false">datePicker</string>
-    <string name="to_date_picker" translatable="false">toDatePicker</string>
 
     <string name="appwidget_text">Next Reminder</string>
     <string name="add_widget">Add widget</string>
 
-    <string name="pref_size_label">Choose Size</string>
-    <string name="pref_size_normal">Standard</string>
-    <string name="pref_size_large">Larger</string>
-    <string name="pref_size_xlarge">Largest</string>
-    
-    <string name="pref_size_key" translatable="false">size</string>
-    <string name="pref_size_normal_value" translatable="false">standard</string>
-    <string name="pref_size_large_value" translatable="false">larger</string>
-    <string name="pref_size_xlarge_value" translatable="false">largest</string>
 
     <string name="hello_blank_fragment">where?</string>
     <string name="no_type" translatable="false">no_type</string>
-    <string name="early_date" translatable="false">Jan 1, 1900</string>
     <string name="widget_title">SimpleHealthTracker next reminder:</string>
+    <string name="make_note">Make a note for a caregiver</string>
 
 </resources>

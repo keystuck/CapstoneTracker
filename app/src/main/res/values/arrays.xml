@@ -8,15 +8,4 @@
         <item>@string/type_other</item>
     </string-array>
 
-    <array name="pref_size_option_labels">
-        <item>@string/pref_size_normal</item>
-        <item>@string/pref_size_large</item>
-        <item>@string/pref_size_xlarge</item>
-    </array>
-
-    <array name="pref_size_option_values">
-        <item>@string/pref_size_normal_value</item>
-        <item>@string/pref_size_large_value</item>
-        <item>@string/pref_size_xlarge_value</item>
-    </array>
 </resources>

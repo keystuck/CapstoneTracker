@@ -77,8 +77,8 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         currentItem = mEntryList.get(position);
         holder.descriptionView.setText(currentItem.getDescription());
         holder.timeView.setText(convertDate(currentItem.getTimeStamp()));
-        holder.idHolder.setText("" + currentItem.getEntryId());
-        holder.longDateView.setText("" + currentItem.getTimeStamp());
+        holder.idHolder.setText(currentItem.getEntryId());
+        holder.longDateView.setText(Long.toString(currentItem.getTimeStamp()));
 
         //if this is for a report, get info from the record
         //also highlight missed tasks

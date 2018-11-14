@@ -17,7 +17,7 @@ import java.util.Date;
 public class NextAlarmWidgetProvider extends AppWidgetProvider {
 
     public static void updateWithNewReminder(Context context, String nextReminder, long timeOfReminder){
-        String timeString = "";
+        String timeString;
         if (nextReminder.isEmpty() || timeOfReminder == 0){
             timeString = context.getResources().getString(R.string.widget_failure_text);
         }
@@ -37,7 +37,6 @@ public class NextAlarmWidgetProvider extends AppWidgetProvider {
         for (int i = 0; i < ids.length; i++) {
             updateAppWidget(context, AppWidgetManager.getInstance(context), ids[i], timeString);
         }
-
     }
 
     static void updateAppWidget(Context context, AppWidgetManager appWidgetManager,

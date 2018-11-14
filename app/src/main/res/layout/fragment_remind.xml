@@ -39,20 +39,22 @@
 
             <EditText
                 android:id="@+id/et_description"
+                android:inputType="text"
+                android:hint="@string/reminder_example"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:ems="10"
-                tools:text="@string/reminder_example" />
+                android:ems="10"/>
 
             <TextView
                 android:id="@+id/tv_dose_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Dosage" />
+                android:text="@string/dose" />
 
             <EditText
                 android:id="@+id/et_dose"
+                android:hint="@string/dose_example"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:ems="10"
@@ -62,7 +64,7 @@
                 android:id="@+id/tv_datetime_label"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:text="Date and Time" />
+                android:text="@string/date_and_time" />
 
             <LinearLayout
                 android:layout_width="match_parent"

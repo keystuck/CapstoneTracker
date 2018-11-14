@@ -5,7 +5,7 @@ android {
         config {
             keyAlias 'key1'
             keyPassword 'stuckey'
-            storeFile file('$rootDir/keystore.jks')
+            storeFile file("$rootDir/keystore.jks")
             storePassword 'stuckey'
         }
     }

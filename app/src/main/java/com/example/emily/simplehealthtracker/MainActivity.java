@@ -25,6 +25,10 @@ import com.google.android.gms.ads.AdRequest;
 import com.google.android.gms.ads.AdView;
 import com.google.android.gms.ads.MobileAds;
 
+import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Socket;
+import java.net.SocketAddress;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -48,9 +52,8 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         MobileAds.initialize(this, ADMOB_ID);
 
-        mAdView = findViewById(R.id.adView);
-        AdRequest adRequest = new AdRequest.Builder().build();
-        mAdView.loadAd(adRequest);
+        new CheckOnlineForAdsTask().execute();
+
     }
 
 
@@ -75,6 +78,29 @@ public class MainActivity extends AppCompatActivity {
             channel.setDescription(description);
             NotificationManager notificationManager = getSystemService(NotificationManager.class);
             notificationManager.createNotificationChannel(channel);
+        }
+    }
+
+    class CheckOnlineForAdsTask extends AsyncTask<Void, Void, Void>{
+        @Override
+        protected Void doInBackground(Void... voids) {
+            try {
+                // Code in this try block is adapted from Levit:
+                // https://stackoverflow.com/a/27312494
+                int timeout = 1500;
+                Socket socket = new Socket();
+                SocketAddress socketAddress = new InetSocketAddress("8.8.8.8", 53);
+                socket.connect(socketAddress, timeout);
+                socket.close();
+
+                mAdView = findViewById(R.id.adView);
+                AdRequest adRequest = new AdRequest.Builder().build();
+                mAdView.loadAd(adRequest);
+
+            } catch (IOException e){
+                e.printStackTrace();
+            }
+            return null;
         }
     }
 
