@@ -25,11 +25,18 @@ public class SimpleActivity extends AppCompatActivity  {
     EntryViewModel entryViewModel;
     XmlClickable fragmentButton;
 
+    private static final String LOG_TAG = SimpleActivity.class.getSimpleName();
+
     private static final String TAG_TAG = "tag";
     private static final String CHECK_TAG = "check";
     private static final String NOTE_TAG = "note";
     private static final String REMIND_TAG = "remind";
     private static final String TRACK_TAG = "track";
+
+    private static final String DELETE_TAG = "delete";
+
+    private static final String ADD_TAG = "add";
+    private static final String REMOVE_TAG = "remove";
 
     private Fragment mFragment;
 
@@ -101,6 +108,80 @@ public class SimpleActivity extends AppCompatActivity  {
         int taskId = view.getId();
         FragmentManager fragmentManager = getSupportFragmentManager();
 
+
+        if (taskId == R.id.btn_add && fragmentManager.findFragmentByTag(ADD_TAG) == null){
+            AddMenuFragment addMenuFragment = new AddMenuFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, addMenuFragment, ADD_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            Log.d(LOG_TAG, "clicked add");
+            fragmentManager.executePendingTransactions();
+//            fragmentButton = addMenuFragment;
+            mFragment = addMenuFragment;
+        }
+
+        else if (taskId == R.id.btn_remove && fragmentManager.findFragmentByTag(REMOVE_TAG) == null){
+            RemoveMenuFragment removeMenuFragment = new RemoveMenuFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, removeMenuFragment, REMOVE_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+            Log.d(LOG_TAG, "clicked remove");
+//            fragmentButton = removeMenuFragment;
+            mFragment = removeMenuFragment;
+        }
+        else if (taskId == R.id.btn_add_future && fragmentManager.findFragmentByTag(REMIND_TAG) == null){
+            RemindFragment remindFragment = new RemindFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, remindFragment, REMIND_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+            Log.d(LOG_TAG, "clicked add future");
+            fragmentButton = remindFragment;
+            mFragment = remindFragment;
+        }
+        else if (taskId == R.id.btn_add_past && fragmentManager.findFragmentByTag(TRACK_TAG) == null){
+            TrackFragment trackFragment = new TrackFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, trackFragment, TRACK_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+            Log.d(LOG_TAG, "clicked add past");
+            fragmentButton = trackFragment;
+            mFragment = trackFragment;
+        }
+        else if (taskId == R.id.btn_add_note && fragmentManager.findFragmentByTag(NOTE_TAG) == null){
+            NoteFragment noteFragment = new NoteFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, noteFragment, NOTE_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+            Log.d(LOG_TAG, "clicked add note");
+            fragmentButton = noteFragment;
+            mFragment = noteFragment;
+        }
+        else if (taskId == R.id.btn_check_off && fragmentManager.findFragmentByTag(CHECK_TAG) == null){
+            CheckFragment checkFragment = new CheckFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, checkFragment, CHECK_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+            Log.d(LOG_TAG, "clicked check off");
+            fragmentButton = checkFragment;
+            mFragment = checkFragment;
+        }
+        else if (taskId == R.id.btn_delete_mistake && fragmentManager.findFragmentByTag(DELETE_TAG) == null){
+            Log.d(LOG_TAG, "clicked delete");
+            //TODO: create delete activity?
+        }
+
+/*
         if (taskId == R.id.btn_check && fragmentManager.findFragmentByTag(CHECK_TAG) == null){
             CheckFragment checkFragment = new CheckFragment();
             fragmentManager.beginTransaction()
@@ -147,7 +228,7 @@ public class SimpleActivity extends AppCompatActivity  {
             mFragment = noteFragment;
 
         }
-
+*/
     }
 
     public void handleButtonPush(View v){

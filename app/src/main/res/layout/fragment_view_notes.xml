@@ -13,7 +13,7 @@
         android:textSize="20sp"
         android:padding="8dp"
         android:textAllCaps="false"
-        android:background="@color/check"
+        android:background="@color/add"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         app:layout_constraintLeft_toLeftOf="parent"

@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".RemoveMenuFragment">
+    <Button
+        android:id="@+id/btn_check_off"
+        android:onClick="openTask"
+        style="@style/ButtonTheme"
+        android:background="@color/check_off"
+        android:text="@string/check_off"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_delete_mistake"
+
+        />
+
+    <Button
+        android:id="@+id/btn_delete_mistake"
+        android:onClick="openTask"
+        style="@style/ButtonTheme"
+        android:background="@color/remove"
+        android:text="@string/delete_mistake"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_check_off"
+
+        />
+
+</android.support.constraint.ConstraintLayout>

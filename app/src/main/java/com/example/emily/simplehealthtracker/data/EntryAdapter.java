@@ -6,7 +6,6 @@ import android.support.annotation.NonNull;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
-import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -23,6 +22,8 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 
 public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHolder> {
+
+    private static final String LOG_TAG = EntryAdapter.class.getSimpleName();
 
     private List<Entry> mEntryList;
     private EntryAdapter.OnBoxChecked onBoxChecked;
@@ -77,7 +78,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         currentItem = mEntryList.get(position);
         holder.descriptionView.setText(currentItem.getDescription());
         holder.timeView.setText(convertDate(currentItem.getTimeStamp()));
-        holder.idHolder.setText(currentItem.getEntryId());
+        holder.idHolder.setText(Integer.toString(currentItem.getEntryId()));
         holder.longDateView.setText(Long.toString(currentItem.getTimeStamp()));
 
         //if this is for a report, get info from the record
@@ -85,7 +86,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
         if (highlightMissed) {
             if (currentItem.getTaken() == 0) {
                 if (Long.parseLong(holder.longDateView.getText().toString()) < System.currentTimeMillis()){
-                    holder.itemHolder.setBackgroundColor(context.getResources().getColor(R.color.track));
+                    holder.itemHolder.setBackgroundColor(context.getResources().getColor(R.color.remove));
                 }
 
             }
@@ -96,7 +97,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
             int adapterPosition = holder.getAdapterPosition();
             if (sparseBooleanArray.get(adapterPosition)){
                 holder.doneBox.setChecked(true);
-                holder.doneBox.setBackgroundColor(context.getResources().getColor(R.color.check));
+                holder.doneBox.setBackgroundColor(context.getResources().getColor(R.color.add));
             } else {
                 holder.doneBox.setChecked(false);
             }
@@ -168,7 +169,7 @@ public class EntryAdapter extends RecyclerView.Adapter<EntryAdapter.EntryViewHol
                     } else {
                         checkView.setText(R.string.will_check_off);
                     }
-                    checkView.setBackgroundColor(context.getResources().getColor(R.color.check));
+                    checkView.setBackgroundColor(context.getResources().getColor(R.color.add));
                     sparseBooleanArray.put(adapterPosition, true);
                 } else {
                     doneBox.setChecked(false);

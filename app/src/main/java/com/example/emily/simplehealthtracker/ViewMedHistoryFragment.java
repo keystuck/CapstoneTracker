@@ -42,7 +42,7 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewMedHistoryFragment extends Fragment implements DetailedActivity.XmlClickable, EntryAdapter.EntryClickListener {
+public class ViewMedHistoryFragment extends Fragment implements DetailedActivity.XmlClickable, EntryAdapter.EntryClickListener, SimpleActivity.XmlClickable {
 
     private EntryAdapter mEntryAdapter;
     private LinearLayoutManager mLinearLayoutManager;
@@ -169,5 +169,17 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
 
     @Override
     public void showToDatePickerDialog(View v) {
+    }
+
+    @Override
+    public void handleFragmentButtonPush(View v) {
+    }
+
+    @Override
+    public void checkOff(View v) {
+    }
+
+    @Override
+    public void saveChanges(View v) {
     }
 }

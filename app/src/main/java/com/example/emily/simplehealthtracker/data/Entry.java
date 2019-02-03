@@ -53,6 +53,7 @@ public class Entry {
             output += " was not taken at " +
                     convertDate(timeStamp) + "\n";
         }
+        output += " ID: " + entryId;
         return output;
     }
 

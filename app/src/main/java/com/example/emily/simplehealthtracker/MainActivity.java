@@ -52,7 +52,7 @@ public class MainActivity extends AppCompatActivity {
         createNotificationChannel();
         MobileAds.initialize(this, ADMOB_ID);
 
-        new CheckOnlineForAdsTask().execute();
+//        new CheckOnlineForAdsTask().execute();
 
     }
 

@@ -6,7 +6,32 @@
     android:layout_height="match_parent"
     tools:context=".SimpleMenuFragment">
 
-    <!-- TODO: Update blank fragment layout -->
+
+    <Button
+        android:id="@+id/btn_add"
+        android:onClick="openTask"
+        style="@style/ButtonTheme"
+        android:background="@color/add"
+        android:text="@string/add"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/btn_remove"
+        />
+
+    <Button
+        android:id="@+id/btn_remove"
+        android:onClick="openTask"
+        style="@style/ButtonTheme"
+        android:background="@color/remove"
+        android:text="@string/remove"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/btn_add"
+
+        />
+    <!--
     <Button
         android:id="@+id/btn_check"
         android:layout_width="0dp"
@@ -66,5 +91,6 @@
         app:layout_constraintLeft_toRightOf="@id/btn_note"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_track" />
+        -->
 
 </android.support.constraint.ConstraintLayout>

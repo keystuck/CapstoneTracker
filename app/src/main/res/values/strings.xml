@@ -7,11 +7,22 @@
     <string name="simple">Simple Menu</string>
     <string name="detailed">Detailed Menu</string>
 
+
     <string name="check">Check Item Off a List</string>
     <string name="track">Enter an Event</string>
-    <string name="note">Record a Note</string>
-    <string name="reminder">Set a Reminder</string>
 
+    <string name="reminder">Set an Alarm</string>
+
+
+    <string name="add">Add</string>
+    <string name="remove">Remove</string>
+
+    <string name="future">Add a future event</string>
+    <string name="past">Add a past event</string>
+    <string name="note">Make a Note</string>
+
+    <string name="check_off">Check Off as Done</string>
+    <string name="delete_mistake">Delete (mistake)</string>
     <string name="save">Save</string>
     <string name="cancel">Cancel</string>
     <string name="delete">Delete Selected</string>

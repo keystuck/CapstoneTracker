@@ -10,7 +10,7 @@
         android:id="@+id/label_note"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:background="@color/note"
+        android:background="@color/future"
         android:padding="8dp"
         android:text="@string/note"
         android:textAllCaps="false"

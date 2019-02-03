@@ -3,7 +3,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
-    android:background="@color/check"
+    android:background="@color/add"
     android:padding="@dimen/widget_margin">
     <TextView
         android:layout_width="wrap_content"

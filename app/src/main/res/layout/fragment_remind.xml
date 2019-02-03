@@ -12,7 +12,7 @@
         android:textSize="20sp"
         android:padding="8dp"
         android:textAllCaps="false"
-        android:background="@color/reminder"
+        android:background="@color/past"
         android:layout_width="match_parent"
         android:layout_height="wrap_content" />
 
@@ -129,7 +129,7 @@
         android:id="@+id/button"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:background="@color/check"
+        android:background="@color/add"
         android:onClick="handleButtonPush"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"

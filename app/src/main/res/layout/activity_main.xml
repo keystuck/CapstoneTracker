@@ -9,11 +9,9 @@
 <Button
     android:id="@+id/btn_simple"
     android:onClick="startSimpleOrDetailed"
-    android:layout_width="match_parent"
-    android:layout_height="0dp"
-    android:layout_margin="16dp"
-    android:textSize="40sp"
-    android:textAllCaps="false"
+
+    style="@style/ButtonTheme"
+
     app:layout_constraintLeft_toLeftOf="parent"
     app:layout_constraintTop_toTopOf="parent"
     app:layout_constraintBottom_toTopOf="@id/btn_detailed"
@@ -23,11 +21,7 @@
     <Button
         android:id="@+id/btn_detailed"
         android:onClick="startSimpleOrDetailed"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_margin="16dp"
-        android:textSize="40sp"
-        android:textAllCaps="false"
+        style="@style/ButtonTheme"
         app:layout_constraintBottom_toTopOf="@id/adView"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@id/btn_simple"

@@ -41,6 +41,8 @@ public class CheckFragment extends Fragment implements SimpleActivity.XmlClickab
     private EntryAdapter mEntryAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
+    private static final String LOG_TAG = CheckFragment.class.getSimpleName();
+
     @BindView(R.id.rv_checklist) RecyclerView mRecyclerView;
     @BindView(R.id.btn_save) Button saveButton;
 
@@ -56,6 +58,7 @@ public class CheckFragment extends Fragment implements SimpleActivity.XmlClickab
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         setHasOptionsMenu(true);
         entryViewModel = ViewModelProviders.of(getActivity()).get(EntryViewModel.class);
     }
@@ -63,6 +66,7 @@ public class CheckFragment extends Fragment implements SimpleActivity.XmlClickab
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              final Bundle savedInstanceState) {
+
 
         View rootView = inflater.inflate(R.layout.fragment_check, container, false);
         ButterKnife.bind(this, rootView);
@@ -80,6 +84,7 @@ public class CheckFragment extends Fragment implements SimpleActivity.XmlClickab
                         toCheckOff.clear();
                         mEntryAdapter.clearSparseBooleanArray();
 
+
                     }
                 });
 
@@ -88,7 +93,6 @@ public class CheckFragment extends Fragment implements SimpleActivity.XmlClickab
 
 
         mRecyclerView.setAdapter(mEntryAdapter);
-
         // Inflate the layout for this fragment
         return rootView;
     }
