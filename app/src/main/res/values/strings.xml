@@ -2,7 +2,7 @@
     <string name="app_name">SimpleHealthTracker</string>
 
     <string name="widget_content_desc">Next Reminder</string>
-    <string name="widget_failure_text">Unable to retrieve next reminder</string>
+    <string name="widget_failure_text">No upcoming reminders</string>
 
     <string name="simple">Simple Menu</string>
     <string name="detailed">Detailed Menu</string>
@@ -17,9 +17,11 @@
     <string name="add">Add</string>
     <string name="remove">Remove</string>
 
-    <string name="future">Add a future event</string>
-    <string name="past">Add a past event</string>
+    <string name="future">Add a future event/reminder</string>
+    <string name="past">Record pain/nausea/fall/unscheduled meds</string>
     <string name="note">Make a Note</string>
+
+    <string name="add_multiple">Add a list to be taken at the same time</string>
 
     <string name="check_off">Check Off as Done</string>
     <string name="delete_mistake">Delete (mistake)</string>
@@ -82,7 +84,7 @@
 
     <string name="hello_blank_fragment">where?</string>
     <string name="no_type" translatable="false">no_type</string>
-    <string name="widget_title">SimpleHealthTracker next reminder:</string>
+    <string name="widget_title">Next reminder:</string>
     <string name="make_note">Make a note for a caregiver</string>
 
 </resources>

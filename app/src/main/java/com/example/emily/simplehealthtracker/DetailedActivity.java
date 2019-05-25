@@ -144,14 +144,14 @@ public class DetailedActivity extends AppCompatActivity {
                     .setAction("Medical History")
                     .build());
 
-                    ViewMedHistoryFragment viewMedHistoryFragment = new ViewMedHistoryFragment();
+                    ViewHistoryFragment viewHistoryFragment = new ViewHistoryFragment();
                     fragmentManager.beginTransaction()
-                            .replace(R.id.detailed_fragment_container, viewMedHistoryFragment, MED_HISTORY)
+                            .replace(R.id.detailed_fragment_container, viewHistoryFragment, MED_HISTORY)
                             .addToBackStack(null)
                             .commit();
                     fragmentManager.executePendingTransactions();
-                    fragmentButton = viewMedHistoryFragment;
-                    mFragment = viewMedHistoryFragment;
+                    fragmentButton = viewHistoryFragment;
+                    mFragment = viewHistoryFragment;
                 }
                 break;
 
@@ -162,8 +162,8 @@ public class DetailedActivity extends AppCompatActivity {
     }
 
 
-    public void handleButtonClick(View v){
-        fragmentButton.handleButtonClick(v);
+    public void handleFragmentButtonPush(View v){
+        fragmentButton.handleFragmentButtonPush(v);
     }
     public void insertNewRecordOrCancel(View v){ fragmentButton.onSearchClicked(v);}
     public void showTimePickerDialog(View v){ fragmentButton.showTimePickerDialog(v); }
@@ -172,7 +172,7 @@ public class DetailedActivity extends AppCompatActivity {
 
     public interface XmlClickable{
         void onSearchClicked(View v);
-        void handleButtonClick(View v);
+        void handleFragmentButtonPush(View v);
         void showTimePickerDialog(View v);
         void showDatePickerDialog(View w);
         void showToDatePickerDialog(View v);

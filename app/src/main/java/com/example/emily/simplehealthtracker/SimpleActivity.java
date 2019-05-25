@@ -172,13 +172,20 @@ public class SimpleActivity extends AppCompatActivity  {
                     .addToBackStack(null)
                     .commit();
             fragmentManager.executePendingTransactions();
-            Log.d(LOG_TAG, "clicked check off");
             fragmentButton = checkFragment;
             mFragment = checkFragment;
         }
         else if (taskId == R.id.btn_delete_mistake && fragmentManager.findFragmentByTag(DELETE_TAG) == null){
             Log.d(LOG_TAG, "clicked delete");
-            //TODO: create delete activity?
+            ViewHistoryFragment viewHistoryFragment = new ViewHistoryFragment();
+            fragmentManager.beginTransaction()
+                    .replace(R.id.simple_fragment_container, viewHistoryFragment, DELETE_TAG)
+                    .addToBackStack(null)
+                    .commit();
+            fragmentManager.executePendingTransactions();
+            fragmentButton = viewHistoryFragment;
+            mFragment = viewHistoryFragment;
+
         }
 
 /*
@@ -231,7 +238,7 @@ public class SimpleActivity extends AppCompatActivity  {
 */
     }
 
-    public void handleButtonPush(View v){
+    public void handleFragmentButtonPush(View v){
         fragmentButton.handleFragmentButtonPush(v);
     }
 

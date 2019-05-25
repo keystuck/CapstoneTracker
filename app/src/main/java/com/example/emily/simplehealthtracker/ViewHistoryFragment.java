@@ -5,13 +5,10 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Intent;
 import android.os.Bundle;
-import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
-import android.support.v4.app.DialogFragment;
 import android.support.v4.app.Fragment;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
-import android.util.Log;
 import android.util.SparseBooleanArray;
 import android.view.LayoutInflater;
 import android.view.Menu;
@@ -20,17 +17,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
-import android.widget.EditText;
-import android.widget.TextView;
 
 import com.example.emily.simplehealthtracker.data.Entry;
 import com.example.emily.simplehealthtracker.data.EntryAdapter;
 import com.example.emily.simplehealthtracker.data.EntryViewModel;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
-import java.util.Date;
 import java.util.List;
 
 import butterknife.BindView;
@@ -42,12 +34,12 @@ import butterknife.ButterKnife;
 /**
  * A simple {@link Fragment} subclass.
  */
-public class ViewMedHistoryFragment extends Fragment implements DetailedActivity.XmlClickable, EntryAdapter.EntryClickListener, SimpleActivity.XmlClickable {
+public class ViewHistoryFragment extends Fragment implements DetailedActivity.XmlClickable, EntryAdapter.EntryClickListener, SimpleActivity.XmlClickable {
 
     private EntryAdapter mEntryAdapter;
     private LinearLayoutManager mLinearLayoutManager;
 
-    private static final String LOG_TAG = ViewMedHistoryFragment.class.getSimpleName();
+    private static final String LOG_TAG = ViewHistoryFragment.class.getSimpleName();
 
     @BindView(R.id.rv_medhistory) RecyclerView mRecyclerView;
     @BindView(R.id.btn_remove) Button removeButton;
@@ -56,7 +48,7 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
     private List<Entry> entryList = new ArrayList<Entry>();
     private List<Entry> toDelete = new ArrayList<>();
 
-    public ViewMedHistoryFragment() {
+    public ViewHistoryFragment() {
         // Required empty public constructor
     }
 
@@ -103,8 +95,7 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
         mLinearLayoutManager = new LinearLayoutManager(getActivity());
         mRecyclerView.setLayoutManager(mLinearLayoutManager);
         mRecyclerView.addItemDecoration(new TaskDecoration(getActivity()));
-        entryViewModel.getEntriesTypeTime(getResources().getString(R.string.type_meds),
-                0, System.currentTimeMillis()).observe(this, new Observer<List<Entry>>() {
+        entryViewModel.getEntries().observe(this, new Observer<List<Entry>>() {
             @Override
             public void onChanged(@Nullable List<Entry> entries) {
                 entryList = entries;
@@ -138,7 +129,7 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
 
 
     @Override
-    public void handleButtonClick(View v) {
+    public void handleFragmentButtonPush(View v) {
         SparseBooleanArray sparseBooleanArray = mEntryAdapter.getSparseBooleanArray();
         for (int i = 0; i < sparseBooleanArray.size(); i++){
             int key = sparseBooleanArray.keyAt(i);
@@ -171,9 +162,6 @@ public class ViewMedHistoryFragment extends Fragment implements DetailedActivity
     public void showToDatePickerDialog(View v) {
     }
 
-    @Override
-    public void handleFragmentButtonPush(View v) {
-    }
 
     @Override
     public void checkOff(View v) {

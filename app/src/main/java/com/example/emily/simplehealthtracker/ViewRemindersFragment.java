@@ -112,7 +112,7 @@ public class ViewRemindersFragment extends Fragment implements DetailedActivity.
 
 
     @Override
-    public void handleButtonClick(View v) {
+    public void handleFragmentButtonPush(View v) {
         SparseBooleanArray sparseBooleanArray = mEntryAdapter.getSparseBooleanArray();
         for (int i = 0; i < sparseBooleanArray.size(); i++){
             int key = sparseBooleanArray.keyAt(i);

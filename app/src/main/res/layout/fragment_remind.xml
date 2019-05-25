@@ -29,7 +29,7 @@
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:orientation="vertical">
-
+            
             <TextView
                 android:id="@+id/tv_desc_label"
                 android:layout_width="wrap_content"
@@ -130,7 +130,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:background="@color/add"
-        android:onClick="handleButtonPush"
+        android:onClick="handleFragmentButtonPush"
         android:text="@string/save"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@id/scrollView_remind"

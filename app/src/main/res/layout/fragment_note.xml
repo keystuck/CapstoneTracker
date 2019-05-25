@@ -56,7 +56,7 @@
         android:layout_height="wrap_content"
         android:layout_margin="20dp"
         android:background="@color/cancel"
-        android:onClick="handleButtonPush"
+        android:onClick="handleFragmentButtonPush"
         android:text="@string/cancel"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintRight_toLeftOf="@id/divider" />
