@@ -35,6 +35,11 @@ public class EntryViewModel extends AndroidViewModel {
         return mDb.entryDao().findByTypeAndTime(type, startTime, endTime);
     }
 
+    public LiveData<List<Entry>> getEntriesWithDesc(String desc){
+        SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
+        return mDb.entryDao().findByDescription(desc);
+    }
+
     public LiveData<List<Entry>> getEntriesOfType(String type){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
         return mDb.entryDao().findByType(type);
@@ -74,6 +79,7 @@ public class EntryViewModel extends AndroidViewModel {
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
 
         Entry tempEntry = new Entry(desc, amplitude, taken, timestamp, type, reminderSet);
+        Log.d(EntryViewModel.class.getSimpleName(), "adding entry " + tempEntry.toString());
         long id = mDb.entryDao().insertEntry(tempEntry);
         if (mDb.entryDao().getAll() == null){
             Log.d(EntryViewModel.class.getSimpleName(), "null");
@@ -99,5 +105,10 @@ public class EntryViewModel extends AndroidViewModel {
     public LiveData<Entry> getNextReminder(){
         SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
         return mDb.entryDao().getEarliestFutureEntry(System.currentTimeMillis());
+    }
+
+    public Entry getEntryWithId(int id){
+        SHTDatabase mDb = SHTDatabase.getsInstance(getApplication());
+        return mDb.entryDao().findById(id);
     }
 }

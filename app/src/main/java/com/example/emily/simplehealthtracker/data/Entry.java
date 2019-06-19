@@ -2,6 +2,7 @@ package com.example.emily.simplehealthtracker.data;
 
 import android.arch.persistence.room.ColumnInfo;
 import android.arch.persistence.room.Entity;
+import android.arch.persistence.room.Ignore;
 import android.arch.persistence.room.PrimaryKey;
 
 import java.text.SimpleDateFormat;
@@ -39,6 +40,12 @@ public class Entry {
         this.timeStamp = timeStamp;
         this.recordType = recordType;
         this.reminderSet = reminderSet;
+    }
+
+    //TODO: this is here for the repeating entry lookup
+    @Ignore
+    public Entry(int id){
+        this.entryId = id;
     }
 
     @Override
@@ -116,4 +123,9 @@ public class Entry {
         return time;
     }
 
+    @Override
+    public boolean equals(Object obj) {
+        Entry entry = ((Entry) obj);
+        return (this.entryId == entry.entryId);
+    }
 }

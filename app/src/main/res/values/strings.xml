@@ -42,6 +42,8 @@
     <string name="amplitude_description">Amount (if not relevant, enter 1)</string>
     <string name="date_description">Click to choose date</string>
     <string name="time_description">Click to choose time</string>
+    <string name="make_repeating">Repeat every</string>
+    <string name="days">days</string>
     <string name="type_description">Type of record</string>
     <string name="from_date_reminder_hint">Click to choose earliest date to display (for today, leave blank)</string>
     <string name="to_date_reminder_hint">Click to choose latest date to display (for next two weeks, leave blank)</string>

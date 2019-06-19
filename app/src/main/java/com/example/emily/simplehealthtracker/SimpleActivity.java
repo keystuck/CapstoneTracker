@@ -16,6 +16,8 @@ import android.view.View;
 
 import com.example.emily.simplehealthtracker.data.Entry;
 import com.example.emily.simplehealthtracker.data.EntryViewModel;
+import com.example.emily.simplehealthtracker.data.RepeatingEntry;
+import com.example.emily.simplehealthtracker.data.RepeatingEntryViewModel;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -23,9 +25,11 @@ import java.util.List;
 public class SimpleActivity extends AppCompatActivity  {
 
     EntryViewModel entryViewModel;
+    RepeatingEntryViewModel repeatingEntryViewModel;
     XmlClickable fragmentButton;
 
     private static final String LOG_TAG = SimpleActivity.class.getSimpleName();
+    private static final long TWO_HOURS = 2 * 3600 * 1000;
 
     private static final String TAG_TAG = "tag";
     private static final String CHECK_TAG = "check";
@@ -40,7 +44,7 @@ public class SimpleActivity extends AppCompatActivity  {
 
     private Fragment mFragment;
 
-    private List<Entry> entryList = new ArrayList<>();
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -55,6 +59,11 @@ public class SimpleActivity extends AppCompatActivity  {
 
 
             entryViewModel = ViewModelProviders.of(this).get(EntryViewModel.class);
+            repeatingEntryViewModel = ViewModelProviders.of(this).get(RepeatingEntryViewModel.class);
+
+
+
+            updateRepeatingList();
 
 
 
@@ -117,6 +126,7 @@ public class SimpleActivity extends AppCompatActivity  {
                     .commit();
             Log.d(LOG_TAG, "clicked add");
             fragmentManager.executePendingTransactions();
+            //TODO: this is a mismatch btwn Simple & Detailed -- fix
 //            fragmentButton = addMenuFragment;
             mFragment = addMenuFragment;
         }
@@ -129,6 +139,7 @@ public class SimpleActivity extends AppCompatActivity  {
                     .commit();
             fragmentManager.executePendingTransactions();
             Log.d(LOG_TAG, "clicked remove");
+            //TODO: this is a mismatch btwn Simple & Detailed -- fix
 //            fragmentButton = removeMenuFragment;
             mFragment = removeMenuFragment;
         }
@@ -188,54 +199,6 @@ public class SimpleActivity extends AppCompatActivity  {
 
         }
 
-/*
-        if (taskId == R.id.btn_check && fragmentManager.findFragmentByTag(CHECK_TAG) == null){
-            CheckFragment checkFragment = new CheckFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.simple_fragment_container, checkFragment, CHECK_TAG)
-                    .addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-            fragmentButton = checkFragment;
-            mFragment = checkFragment;
-        }
-
-        else if (taskId == R.id.btn_reminder && fragmentManager.findFragmentByTag(REMIND_TAG)== null) {
-            RemindFragment remindFragment = new RemindFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.simple_fragment_container, remindFragment, REMIND_TAG)
-                    .addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-            fragmentButton = remindFragment;
-            mFragment = remindFragment;
-        }
-
-        else if (taskId == R.id.btn_track && fragmentManager.findFragmentByTag(TRACK_TAG) == null){
-
-            TrackFragment trackFragment = new TrackFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.simple_fragment_container, trackFragment, TRACK_TAG)
-                    .addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-            fragmentButton = trackFragment;
-            mFragment = trackFragment;
-        }
-
-        else if (taskId == R.id.btn_note && fragmentManager.findFragmentByTag(NOTE_TAG) == null){
-
-            NoteFragment noteFragment = new NoteFragment();
-            fragmentManager.beginTransaction()
-                    .replace(R.id.simple_fragment_container, noteFragment, NOTE_TAG)
-                    .addToBackStack(null)
-                    .commit();
-            fragmentManager.executePendingTransactions();
-            fragmentButton = noteFragment;
-            mFragment = noteFragment;
-
-        }
-*/
     }
 
     public void handleFragmentButtonPush(View v){
@@ -263,5 +226,59 @@ public class SimpleActivity extends AppCompatActivity  {
         void showTimePickerDialog(View v);
         void showDatePickerDialog(View w);
     }
+
+
+    //instead of generating all possible entries for repeating reminders, update lazily
+    //update with all entries that should exist between the last one and now
+    public void updateRepeatingList() {
+
+
+
+        Log.d(LOG_TAG, "inside udpateRepeatingList");
+        repeatingEntryViewModel.getEntries().observe(this, new Observer<List<RepeatingEntry>>() {
+            @Override
+            public void onChanged(@Nullable List<RepeatingEntry> repeatingEntries) {
+                for (final RepeatingEntry repeatingEntry : repeatingEntries) {
+                    Log.d(LOG_TAG, repeatingEntry.toString());
+
+                    while ((repeatingEntry.lastEntryMade + repeatingEntry.repeatInterval)
+                            < (System.currentTimeMillis() + TWO_HOURS)) {
+                        Log.d(LOG_TAG, "inside the loop");
+                        final long nextUpdate = repeatingEntry.lastEntryMade + repeatingEntry.repeatInterval;
+                        Log.d(LOG_TAG, "last update " + repeatingEntry.lastEntryMade + " next update " +
+                                (repeatingEntry.lastEntryMade + repeatingEntry.repeatInterval));
+                        //get details from entryId
+                        final int entryId = repeatingEntry.firstEntryId;
+                        Log.d(LOG_TAG, "looking for entry " + entryId);
+
+
+                        AppExecutors.getInstance().diskIO().execute(new Runnable() {
+
+                            @Override
+                            public void run() {
+                                Entry tempEntry = entryViewModel.getEntryWithId(entryId);
+                                if (tempEntry != null) {
+                                    Log.d(LOG_TAG, "found Entry with id " + tempEntry.getEntryId());
+                                    //put an undone task in entry table
+                                    final Entry newEntry = new Entry(tempEntry.getDescription(),
+                                            tempEntry.getAmplitude(),
+                                            0,
+                                            nextUpdate,
+                                            tempEntry.getRecordType(),
+                                            1);
+                                    entryViewModel.addEntry(newEntry);
+                                    //then update the repeatingentries table
+                                    repeatingEntry.setLastEntryMade(nextUpdate);
+                                }
+                            }
+                        });
+                    }
+                }
+            }
+        });
+    }
+
+
+
 
 }

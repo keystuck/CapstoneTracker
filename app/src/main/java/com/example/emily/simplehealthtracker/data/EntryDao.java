@@ -36,8 +36,12 @@ public interface EntryDao {
     @Query("UPDATE entry SET taken = 1, time_stamp = :time WHERE entryId LIKE :id")
     void checkOffScheduled(long id, long time);
 
-    @Query("SELECT * FROM entry WHERE entryId LIKE :id ORDER BY time_stamp ASC")
-    LiveData<List<Entry>> findById(long id);
+    @Query("SELECT * FROM entry WHERE entryId LIKE :id LIMIT 1")
+    Entry findById(int id);
+
+    @Query("SELECT * FROM entry WHERE description LIKE :desc")
+    LiveData<List<Entry>> findByDescription(String desc);
+
 
     @Query("SELECT * FROM entry WHERE reminder_set = 1 AND " +
             "time_stamp >= :early ORDER BY time_stamp ASC")

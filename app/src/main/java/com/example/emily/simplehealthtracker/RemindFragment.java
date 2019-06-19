@@ -1,15 +1,12 @@
 package com.example.emily.simplehealthtracker;
 
 import android.app.AlarmManager;
-import android.app.NotificationManager;
 import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
-import android.content.ComponentName;
 import android.content.Context;
 import android.content.Intent;
-import android.content.pm.PackageManager;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -24,15 +21,18 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.EditText;
+import android.widget.NumberPicker;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
 import com.example.emily.simplehealthtracker.data.Entry;
 import com.example.emily.simplehealthtracker.data.EntryViewModel;
+import com.example.emily.simplehealthtracker.data.RepeatingEntryViewModel;
 
-import java.lang.reflect.Array;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -46,13 +46,17 @@ import butterknife.ButterKnife;
 public class RemindFragment extends Fragment implements SimpleActivity.XmlClickable, AdapterView.OnItemSelectedListener {
     private List<Entry> entryList;
     private EntryViewModel entryViewModel;
+    private RepeatingEntryViewModel repeatingEntryViewModel;
     @BindView(R.id.et_description) EditText etDescription;
     @BindView(R.id.et_dose) EditText etDose;
     @BindView(R.id.tv_date) TextView tvDate;
     @BindView(R.id.tv_time) TextView tvTime;
     @BindView(R.id.sp_type) Spinner spType;
+    @BindView(R.id.cb_repeating) CheckBox cbRepeating;
+    @BindView(R.id.np_days) NumberPicker npDays;
 
     private String entryType;
+    private long entryId;
     public static final String ALARM_TEXT = "description";
     public static final String OPEN_FRAGMENT = "fragment";
     public static final String CHECK_FRAGMENT = "check";
@@ -63,6 +67,7 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
         super.onCreate(savedInstanceState);
         setHasOptionsMenu(true);
         entryViewModel = ViewModelProviders.of(getActivity()).get(EntryViewModel.class);
+        repeatingEntryViewModel = ViewModelProviders.of(getActivity()).get(RepeatingEntryViewModel.class);
     }
 
     @Override
@@ -92,6 +97,24 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
             }
         });
         ButterKnife.bind(this, rootView);
+
+        npDays.setMinValue(0);
+        npDays.setMaxValue(7);
+        npDays.setOnValueChangedListener(new NumberPicker.OnValueChangeListener() {
+            @Override
+            public void onValueChange(NumberPicker picker, int oldVal, int newVal) {
+                //TODO: save repeating interval
+            }
+        });
+
+        cbRepeating.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                if (isChecked){
+                    //TODO: set as repeating reminder
+                }
+            }
+        });
 
         ArrayAdapter<CharSequence> adapter = ArrayAdapter.createFromResource(getActivity(), R.array.types_array,
                 android.R.layout.simple_spinner_item);
@@ -163,12 +186,24 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
 
         final Entry currentEntry = new Entry(augDescription, amp, taken, time, type, 1);
 
+        Log.d(RemindFragment.class.getSimpleName(), "checkbox? " + cbRepeating.isChecked());
+
         AppExecutors.getInstance().diskIO().execute(new Runnable() {
             @Override
             public void run() {
-                entryViewModel.addEntry(currentEntry);
+               entryId = entryViewModel.addEntry(currentEntry);
+                if(cbRepeating.isChecked()){
+
+                    repeatingEntryViewModel.addRepeatingEntry((int)entryId,
+                            time,
+                            npDays.getValue());
+                }
             }
         });
+
+
+
+
 
         Entry earliestEntry = currentEntry;
         for (Entry entry : entryList){
@@ -184,14 +219,18 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
         }
 
         int id = generateId(augDescription, time);
-        setAlarm(getActivity(), AlarmReceiver.class, time, id, augDescription);
+        int repeat = (cbRepeating.isChecked()) ? npDays.getValue() : 0;
+        setAlarm(getActivity(), AlarmReceiver.class, time, id, augDescription, repeat);
 
         Toast.makeText(getActivity(), getResources().getString(R.string.add_OK), Toast.LENGTH_SHORT).show();
         etDescription.setText("");
         etDose.setText("");
         tvDate.setText("");
         tvTime.setText("");
-
+        if (cbRepeating.isChecked()) {
+            cbRepeating.toggle();
+        }
+        npDays.setValue(0);
     }
 
     public static int generateId(String description, long time){
@@ -270,18 +309,25 @@ public class RemindFragment extends Fragment implements SimpleActivity.XmlClicka
 
 
 
-    public static void setAlarm(Context context, Class<?> cls, long alarmTime, int id, String description){
+    public static void setAlarm(Context context, Class<?> cls, long alarmTime, int id, String description, int repeatDays){
 
-        Intent i = new Intent(context, cls);
-        i.putExtra(ALARM_TEXT, description);
 
-        PendingIntent pendingI = PendingIntent.getBroadcast(context,
-                id, i, PendingIntent.FLAG_UPDATE_CURRENT);
-        AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
-        am.set(AlarmManager.RTC_WAKEUP, alarmTime,
-                pendingI);
 
-        long minutes = (alarmTime - System.currentTimeMillis())/60000;
+            Intent i = new Intent(context, cls);
+            i.putExtra(ALARM_TEXT, description);
+
+            PendingIntent pendingI = PendingIntent.getBroadcast(context,
+                    id, i, PendingIntent.FLAG_UPDATE_CURRENT);
+            AlarmManager am = (AlarmManager) context.getSystemService(Context.ALARM_SERVICE);
+            if (repeatDays == 0) {
+                am.set(AlarmManager.RTC_WAKEUP, alarmTime,
+                        pendingI);
+            } else {
+                am.setInexactRepeating(AlarmManager.RTC_WAKEUP,
+                        alarmTime,
+                        (AlarmManager.INTERVAL_DAY * repeatDays),
+                        pendingI);
+            }
     }
 
 
